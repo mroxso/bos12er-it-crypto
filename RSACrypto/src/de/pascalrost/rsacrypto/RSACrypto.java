@@ -13,9 +13,20 @@ import javax.crypto.Cipher;
 
 public class RSACrypto {
 
-	Key publicKey = null;
-	Key privateKey = null;
+	Key publicKey = null; // Öffentlicher Schlüssel / Passwort
+	Key privateKey = null; // Privater Schlüssel / Passwort
 	
+	/*
+	 * Konstruktor mit Schlüsselübergabe
+	 */
+	public RSACrypto(Key publicKey, Key privateKey) {
+		this.privateKey = privateKey;
+		this.publicKey = publicKey;
+	}
+	
+	/*
+	 * Konstruktor mit automatischer Schlüsselerzeugung
+	 */
 	public RSACrypto() {
 		try {
 			KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
@@ -29,6 +40,9 @@ public class RSACrypto {
 		}
 	}
 	
+	/*
+	 * Konstruktor mit automatischer Schlüsselerzeugung und variabler Schlüssellänge
+	 */
 	public RSACrypto(int keyLength) {
 		try {
 			KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
@@ -42,6 +56,9 @@ public class RSACrypto {
 		}
 	}
 
+	/*
+	 * Encrypt / Verschlüsseln
+	 */
 	public byte[] encrypt(byte[] data) {
 		byte[] encData = null;
 		try {
@@ -54,7 +71,10 @@ public class RSACrypto {
 
 		return Base64.getEncoder().encode(encData);
     }
-    
+
+	/*
+	 * Decrypt / Entschlüsseln
+	 */
     public byte[] decrypt(byte [] encrypted) {
     	encrypted = Base64.getDecoder().decode(encrypted);
     	
@@ -70,6 +90,11 @@ public class RSACrypto {
         return decData;
 	}
 	
+
+	/*
+	 * Encrypt / Verschlüsseln
+	 * mit übergebenen privateKey
+	 */
 	public byte[] encrypt(PrivateKey privateKey, byte[] data) {
 		byte[] encData = null;
 		try {
@@ -83,6 +108,11 @@ public class RSACrypto {
 		return Base64.getEncoder().encode(encData);
     }
     
+
+	/*
+	 * Decrypt / Entschlüsseln
+	 * mit einem übergebenen publicKey
+	 */
     public byte[] decrypt(PublicKey publicKey, byte [] encrypted) {
     	encrypted = Base64.getDecoder().decode(encrypted);
     	
@@ -98,6 +128,9 @@ public class RSACrypto {
         return decData;
 	}
     
+    /**
+     * Speichert die Schlüssel in Dateien
+     */
     public void saveKeysToFiles() {
     	Base64.Encoder encoder = Base64.getEncoder();
 
@@ -120,12 +153,18 @@ public class RSACrypto {
     	
     }
     
+    /*
+     * Gibt den publicKey zurück
+     */
     public String getPublicKey() {
     	Base64.Encoder encoder = Base64.getEncoder();
     	
     	return encoder.encodeToString(publicKey.getEncoded());
     }
     
+    /*
+     * Gibt den privateKey zurück
+     */
     public String getPrivateKey() {
     	Base64.Encoder encoder = Base64.getEncoder();
     	

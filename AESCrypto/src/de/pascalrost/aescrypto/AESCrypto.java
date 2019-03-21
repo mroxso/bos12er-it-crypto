@@ -9,20 +9,44 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class AESCrypto {
 
+	// Schlüssel / Passwort
 	byte[] key;
 	
+	/*
+	 * Konstruktor mit Schlüsselübergabe
+	 */
 	public AESCrypto(byte[] key) {
 		this.key = key;
 	}
 	
+	/*
+	 * Konstruktor mit automatischer Schlüsselerzeugung
+	 */
 	public AESCrypto() {
 		try {
-			 KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-		     keyGen.init(128);
-	
-		     SecretKey secKey = keyGen.generateKey();
+			// Schlüssel wird generiert (128 Bit Schlüssellänge)
+			KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+		    keyGen.init(128);
+		    SecretKey secKey = keyGen.generateKey();
 		
-		     key = secKey.getEncoded();
+		    key = secKey.getEncoded();
+		     
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	/*
+	 * Konstruktor mit automatischer Schlüsselerzeugung und variabler Schlüssellänge
+	 */
+	public AESCrypto(int keyLength) {
+		try {
+			// Schlüssel wird generiert (mit benutzerdefinierte Schlüssellänge)
+			KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+		    keyGen.init(keyLength);
+		    SecretKey secKey = keyGen.generateKey();
+		
+		    key = secKey.getEncoded();
 		     
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -70,6 +94,20 @@ public class AESCrypto {
 		}
 		
 		return data;
+	}
+	
+	/*
+	 * Schlüssel as byte-Array
+	 */
+	public byte[] getKeyAsBytes() {
+		return key;
+	}
+	
+	/*
+	 * Schlüssel als String 
+	 */
+	public String getKeyAsString() {
+		return Base64.getEncoder().encodeToString(key);
 	}
 	
 }
